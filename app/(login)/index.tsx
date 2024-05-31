@@ -2,14 +2,34 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 
+import { ThemedText } from '@/components/ThemedText'
+
+import { auth, database } from '../../firebase.js'
+import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
+  const [errorText, setErrorText] = useState(' ');
 
-  const handleLogin = () => {
-    router.push('(tabs)/home');
-  };
+  const router = useRouter();
+  const auth = getAuth();
+
+  // TODO: why is this breaking things
+  const db = database;
+
+  function handleLogin() {
+    console.log("Handling Login")
+
+    signInWithEmailAndPassword(auth, email, password)
+     .then((userCredential) => {
+        const user = userCredential.user;
+        router.push('(tabs)/home');
+      })
+      .catch((error) => {
+        setErrorText("Incorrect Password/Email");
+      });
+  }
 
   return (
     <View style={styles.container}>
@@ -27,7 +47,8 @@ const LoginScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <Button onPress={handleLogin} title="Login" />
+      <Text style={styles.label}>{errorText}</Text>
     </View>
   );
 };

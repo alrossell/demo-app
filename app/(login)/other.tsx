@@ -8,6 +8,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
+    router.push('(tabs)/home');
   };
 
   return (
