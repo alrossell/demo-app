@@ -1,25 +1,28 @@
 import { StyleSheet, TextInput, Text, View, Button } from 'react-native';
 import { useState } from 'react';
-import { getAuth } from "firebase/auth";
-import { getDatabase, ref, set } from "firebase/database";
+import { ref, set, onValue } from "firebase/database";
 import { useRootNavigationState, Redirect } from 'expo-router';
 
+import { auth, database } from "@/firebase";
+
 export default function TabTwoScreen() {
-  const auth = getAuth();
-  const database = getDatabase();
   const user = auth.currentUser;
   const [text, onChangeText] = useState('Useless Text');
   const [number, onChangeNumber] = useState('');
 
   function handleDataSubmit() {
     console.log("Handling Data Submission");
-
     const userId = user?.uid;
+
+    onValue(ref(database, 'users/' + userId), (snapshot) => {
+      let data = snapshot.val();
+    });
 
     set(ref(database, 'users/' + userId), {
       text: text,
       number: number,
     }).catch((error) => {
+      console.log("Error");
       console.log(error);
     });
   }

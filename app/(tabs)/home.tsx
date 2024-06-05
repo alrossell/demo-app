@@ -1,11 +1,11 @@
 import { Image, StyleSheet, Platform, Text, View } from 'react-native';
 import { useState, useEffect } from 'react';
+import { ref, onValue } from "firebase/database";
 
-import { getAuth } from "firebase/auth";
 import { useRootNavigationState, Redirect } from 'expo-router';
+import { auth, database } from '@/firebase';
 
 export default function HomeScreen() {
-  const auth = getAuth();
   const user = auth.currentUser;
 
   if (user === null) {
@@ -13,6 +13,16 @@ export default function HomeScreen() {
     if (!rootNavigationState?.key) return null;
     return <Redirect href={'/'} />
   }
+
+
+  const userId = user?.uid;
+
+  const starCountRef = ref(database, 'users/' + userId);
+
+  onValue(starCountRef, (snapshot) => {
+    const data = snapshot.val();
+    console.log(data);
+  });
 
   return (
     <View>
@@ -23,21 +33,3 @@ export default function HomeScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

@@ -12,6 +12,8 @@ web-build/
 
 ./firebase.js
 
+firebase.js
+
 # macOS
 .DS_Store
 

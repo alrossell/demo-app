@@ -36,4 +36,7 @@ body {
   body {
     background-color: #000;
   }
+}
+.firebase-emulator-warning {
+  display: none;
 }`;
