@@ -28,12 +28,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="other"
+        name="new-user"
         options={{
-          title: 'Other',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'other' : 'other-outline'} color={color} />
-          ),
+          title: 'New User',
           tabBarStyle: {
             display: "none"
           }

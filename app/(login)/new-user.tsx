@@ -1,15 +1,31 @@
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { Stack } from 'expo-router';
+import { useRouter } from 'expo-router';
 
-const LoginScreen = () => {
+import { auth } from '@/firebase'
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
+const NewUserScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorText, setErrorText] = useState(' ');
 
-  const handleLogin = () => {
-    router.push('(tabs)/home');
-  };
+  const router = useRouter();
+
+  function handleNewUser() {
+    console.log("Handling Login")
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log("Created user");
+        router.push('/');
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  }
 
   return (
     <View style={styles.container}>
@@ -27,7 +43,7 @@ const LoginScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
+      <Button onPress={handleNewUser} title="Create Account" />
     </View>
   );
 };
@@ -52,5 +68,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default NewUserScreen;
 

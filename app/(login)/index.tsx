@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 
-import { ThemedText } from '@/components/ThemedText'
-
-import { auth, database } from '../../firebase.js'
-import { getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import { auth } from '@/firebase'
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -13,20 +11,15 @@ const LoginScreen = () => {
   const [errorText, setErrorText] = useState(' ');
 
   const router = useRouter();
-  const auth = getAuth();
-
-  // TODO: why is this breaking things
-  const db = database;
 
   function handleLogin() {
     console.log("Handling Login")
 
     signInWithEmailAndPassword(auth, email, password)
-     .then((userCredential) => {
-        const user = userCredential.user;
+      .then(() => {
         router.push('(tabs)/home');
       })
-      .catch((error) => {
+      .catch(() => {
         setErrorText("Incorrect Password/Email");
       });
   }
@@ -48,6 +41,11 @@ const LoginScreen = () => {
         secureTextEntry
       />
       <Button onPress={handleLogin} title="Login" />
+      <Button
+        onPress={
+          () => { router.push('new-user') }}
+        title="New User"
+      />
       <Text style={styles.label}>{errorText}</Text>
     </View>
   );

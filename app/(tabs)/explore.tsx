@@ -1,6 +1,6 @@
 import { StyleSheet, TextInput, Text, View, Button } from 'react-native';
 import { useState } from 'react';
-import { ref, set, onValue } from "firebase/database";
+import { ref, set, onValue, push } from "firebase/database";
 import { useRootNavigationState, Redirect } from 'expo-router';
 
 import { auth, database } from "@/firebase";
@@ -14,17 +14,23 @@ export default function TabTwoScreen() {
     console.log("Handling Data Submission");
     const userId = user?.uid;
 
-    onValue(ref(database, 'users/' + userId), (snapshot) => {
-      let data = snapshot.val();
-    });
+    const postListRef = ref(database, 'posts');
+    const newPostRef = push(postListRef);
 
-    set(ref(database, 'users/' + userId), {
-      text: text,
-      number: number,
-    }).catch((error) => {
-      console.log("Error");
-      console.log(error);
-    });
+    const postData = {
+      title: text,
+      content: number,
+      author: userId,
+      timestamp: Date.now()
+    };
+
+    set(newPostRef, postData)
+      .then(() => {
+        console.log("New post added successfully!");
+      })
+      .catch((error) => {
+        console.error("Error adding new post: ", error);
+      });
   }
 
   if (user === null) {
