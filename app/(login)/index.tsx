@@ -12,6 +12,10 @@ const LoginScreen = () => {
 
   const router = useRouter();
 
+  console.log("Printing Port");
+  console.log(process.env);
+
+
   function handleLogin() {
     console.log("Handling Login")
 
