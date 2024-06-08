@@ -5,10 +5,9 @@ import { useRouter } from 'expo-router';
 import { auth } from '@/firebase'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-const NewUserScreen = () => {
+const NewReviewScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorText, setErrorText] = useState(' ');
 
   const router = useRouter();
 
@@ -67,5 +66,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewUserScreen;
+export default NewReviewScreen;
 

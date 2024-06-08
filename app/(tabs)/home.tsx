@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { getDatabase, ref, onValue } from "firebase/database";
-import { database, auth } from "@/firebase"
+import { auth, database } from "@/firebase"
 import { useRootNavigationState, Redirect } from 'expo-router';
 
 interface Post {
@@ -22,8 +22,7 @@ const PostList: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    const db = getDatabase();
-    const postListRef = ref(db, 'posts');
+    const postListRef = ref(database, 'posts');
 
     onValue(postListRef, (snapshot) => {
       const data = snapshot.val();
